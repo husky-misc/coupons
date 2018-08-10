@@ -22,8 +22,7 @@ class Coupons::CouponsController < Coupons::ApplicationController
   def create
     @coupon = Coupon.new(coupon_params)
     @coupon.owner_id = 1 unless @coupon.owner_id
-    #@coupon.attachments = { referring: User.first }
-
+    
     if @coupon.save
       redirect_to coupons_path,
         notice: t('coupons.flash.coupons.create.notice')
