@@ -1,5 +1,8 @@
 class SetupCoupons < ActiveRecord::Migration[5.0]
   def change
+    drop_table :coupons
+    drop_table :coupon_redemptions
+
     create_table :coupons do |t|
       t.string :code, null: false
       t.string :description, null: true
@@ -10,14 +13,18 @@ class SetupCoupons < ActiveRecord::Migration[5.0]
       t.integer :amount, null: false, default: 0
       t.string :type, null: false
       t.timestamps null: false
+      t.integer :owner_id, null: false
 
       case ActiveRecord::Base.connection.adapter_name
       when 'Mysql2'
         t.text :attachments
       else
-        t.text :attachments, null: false, default: '{}'
+        t.text :attachments, default: '{}'
       end
     end
+
+    add_index :coupons, :owner_id
+    add_index :coupons, :code, unique: true
 
     create_table :coupon_redemptions do |t|
       t.belongs_to :coupon, null: false

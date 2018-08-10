@@ -9,7 +9,13 @@ module Coupons
 
       # Set default values.
       after_initialize do
-        self.code ||= Coupons.configuration.generator.call
+
+        uniq_code = Coupons.configuration.generator.call
+        while Coupons::Models::Coupon.find_by(code: uniq_code) do
+          uniq_code = Coupons.configuration.generator.call
+        end
+
+        self.code ||= uniq_code
         self.valid_from ||= Date.current
 
         attachments_will_change!
