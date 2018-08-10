@@ -21,6 +21,7 @@ class Coupons::CouponsController < Coupons::ApplicationController
 
   def create
     @coupon = Coupon.new(coupon_params)
+    @coupon.attachments = { referring: User.first }
 
     if @coupon.save
       redirect_to coupons_path,
