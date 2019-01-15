@@ -1,5 +1,7 @@
 class SetupCoupons < ActiveRecord::Migration[5.0]
   def change
+    drop_table :coupons if ActiveRecord::Base.connection.table_exists? 'coupons'
+    drop_table :coupon_redemptions if ActiveRecord::Base.connection.table_exists? 'coupon_redemptions'
     
     create_table :coupons do |t|
       t.string :code, null: false
